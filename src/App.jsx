@@ -6,16 +6,20 @@ function App() {
   const OPERATORS = ['+', '-', '=', 'C'];
   
   const [calc, setCalc] = useState('');
+  const [isCalcResult, setIsCalcResult] = useState(false);
 
-  const getNumber = (num) => {
+  const performTheOperation = (num) => {
     if (num === '=') {
       setCalc(eval(calc));
+      setIsCalcResult(true);
     } else {
+      setIsCalcResult(false);
       setCalc((prev) => prev + num);
     }
 
     if (num === 'C') {
       setCalc('');
+      setIsCalcResult(false);
     }
   }
 
@@ -23,18 +27,18 @@ function App() {
     <div className={styles.app}>
       <div className={styles.calculator}>
         <div className={styles.field}>
-          <div className={styles.result}>{calc}</div>
+          <div className={isCalcResult ? styles.resultCalc : styles.result}>{calc}</div>
         </div>
         <div className={styles.commands}>
           <div className={styles.numbers}>
             {
-            NUMS.map(item => (
+            NUMS.map(button => (
               <button 
-                  key={+item} 
+                  key={+button} 
                   className={styles.numbersButton} 
-                  onClick={() => {getNumber(item)}}
+                  onClick={() => {performTheOperation(button)}}
               >
-                {item}
+                {button}
               </button>
             ))
             }
@@ -44,7 +48,7 @@ function App() {
             OPERATORS.map((operator, index) => (
               <button 
                   key={index} 
-                  onClick={() => {getNumber(operator)}} 
+                  onClick={() => {performTheOperation(operator)}} 
               >
                 {operator}
               </button>
